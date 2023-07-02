@@ -1,18 +1,23 @@
-import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { AppTitle } from '../../components/AppTitle';
 import { OnKeyDownEvent } from '../../components/VirtualKeyboard/KeyCap';
 import { VirtualKeyboard } from '../../components/VirtualKeyboard/VirtualKeyboard';
 import { wait } from '../../components/wait';
 import { LetterGuessState, ShortLocale, WordSize, fetchDictionary, matchGuess } from '../../game/Wordle';
 
 const WORD_SIZE = 5;
-const TRY_COUNT = 5;
+
+function createNewLine(): LetterGuessState[] {
+  return Array.from({ length: WORD_SIZE }).map(() => {
+    return {
+      letter: ' ',
+      state: 'unmatched'
+    };
+  });
+}
 
 export function PlayPage() {
   const navigate = useNavigate();
@@ -22,14 +27,7 @@ export function PlayPage() {
   const [dictionary, setDictionary] = useState<string[]>([]);
   const [targetWord, setTargetWord] = useState<string>(' ');
   const [playboard, setPlayboard] = useState<LetterGuessState[][]>(() => {
-    return Array.from({ length: TRY_COUNT }).map(() => {
-      return Array.from({ length: WORD_SIZE }).map(() => {
-        return {
-          letter: ' ',
-          state: 'unmatched'
-        };
-      });
-    });
+    return [createNewLine()];
   });
   const [letterIndex, setLetterIndex] = useState(0);
   const [currentTry, setCurrentTry] = useState(0);
@@ -83,6 +81,9 @@ export function PlayPage() {
         setCurrentTry((prevCurrentTry) => prevCurrentTry + 1);
         setLetterIndex(0);
         setKeyboardDisabled(false);
+        setPlayboard((prevPlayboard) => {
+          return [...prevPlayboard, createNewLine()];
+        });
       });
     },
     [currentTry, dictionary, displayResultAsync, playboard, targetWord]
@@ -117,41 +118,54 @@ export function PlayPage() {
   );
 
   return (
-    <Container maxWidth="md" sx={{ p: 0 }}>
-      <AppTitle />
-      <Alert severity="error">
-        <AlertTitle>{targetWord}</AlertTitle>
-      </Alert>
-      <Grid container spacing={1}>
-        {playboard.map(function (row, i) {
-          return (
-            <Grid item container spacing={1} xs={12} key={i} sx={{ justifyContent: 'center', alignItems: 'center' }}>
-              {row.map(function (letterState, j) {
-                return (
-                  <Grid item xs={2} key={j}>
-                    <Box
-                      sx={{
-                        aspectRatio: '1/1',
-                        fontFamily: '"Roboto Mono", monospace',
-                        fontWeight: 'bold',
-                        fontSize: 'clamp(2.5rem, 10cqi + 0.5rem, 5rem)',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        lineHeight: '1.1',
-                        backgroundColor: `${letterState.state}.main`,
-                        color: `${letterState.state}.contrastText`
-                      }}
-                    >
-                      {letterState.letter}
-                    </Box>
-                  </Grid>
-                );
-              })}
-            </Grid>
-          );
-        })}
-      </Grid>
+    <Container maxWidth="md" sx={{ px: 0, py: 1, fontSize: 'clamp(2.5rem, 10cqi + 0.5rem, 5rem)' }}>
+      <Box
+        sx={{
+          overflowY: 'auto',
+          overflowX: 'none',
+          height: '30vh',
+          maxWidth: '100%'
+        }}
+      >
+        <Grid container rowSpacing={1} columnSpacing={0} flexDirection="column-reverse" justifyContent="flex-start">
+          {playboard.map(function (row, i) {
+            return (
+              <Grid
+                key={i}
+                item
+                container
+                spacing={1}
+                justifyContent="center"
+                alignItems="center"
+                sx={{ overflow: 'none', height: 'fit-content', width: '100%' }}
+              >
+                {row.map(function (letterState, j) {
+                  return (
+                    <Grid key={j} item xs={2}>
+                      <Box
+                        sx={{
+                          aspectRatio: '1/1',
+                          fontFamily: '"Roboto Mono", monospace',
+                          fontWeight: 'bold',
+
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          lineHeight: '1.1',
+                          backgroundColor: `${letterState.state}.main`,
+                          color: `${letterState.state}.contrastText`
+                        }}
+                      >
+                        {letterState.letter}
+                      </Box>
+                    </Grid>
+                  );
+                })}
+              </Grid>
+            );
+          })}
+        </Grid>
+      </Box>
       <VirtualKeyboard
         layout="azerty"
         disabled={isKeyboardDisabled}

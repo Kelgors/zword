@@ -37,7 +37,7 @@ export function VirtualKeyboard(props: VirtualKeyboardProps) {
               key={row}
               direction="row"
               spacing={{ xs: 0.5, md: 1 }}
-              sx={{ paddingLeft: `${index * 1}em`, width: 'fit-content' }}
+              sx={{ paddingLeft: `${index * 0.3}em`, width: 'fit-content' }}
             >
               {row.split('').map(function (char) {
                 return (
