@@ -1,0 +1,12 @@
+{
+  "back": "Retour",
+  "app.title": "Wordydeedoo",
+  "home.buttons.play": "Jouer",
+  "home.buttons.options": "Options",
+  "home.buttons.credits": "Crédits",
+
+  "keyboard.return": "Confirmer",
+
+  "credits.created-by": "Créé par <link></link> en 2023",
+  "credits.sources": "Code source disponible sur <link></link>"
+}

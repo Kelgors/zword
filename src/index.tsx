@@ -1,16 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+import { IntlProvider } from 'react-intl';
 import App from './App';
-import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+import messages from './i18n';
+import './index.css';
 import reportWebVitals from './reportWebVitals';
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
+const language = navigator.language.split(/[-_]/)[0];
+const currentLanguageMessages = messages[language] || messages.en;
+
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
-    <App />
+    <IntlProvider locale={language} messages={currentLanguageMessages}>
+      <App />
+    </IntlProvider>
   </React.StrictMode>
 );
 
