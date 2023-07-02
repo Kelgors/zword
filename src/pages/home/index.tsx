@@ -15,7 +15,7 @@ export function HomePage() {
         <Button href="/options" disabled>
           <FormattedMessage id="home.buttons.options" />
         </Button>
-        <Button href="/credits">
+        <Button href="/credits" disabled>
           <FormattedMessage id="home.buttons.credits" />
         </Button>
       </Stack>
