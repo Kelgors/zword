@@ -55,7 +55,7 @@ export function PlayPage() {
   const displayResultAsync = useCallback(
     async function (result: LetterGuessState[]) {
       for (let index = 0; index < result.length; index++) {
-        await wait(200);
+        await wait(300);
 
         const letterState = result[index];
         setPlayboard((prevPlayboard) => {
@@ -64,6 +64,7 @@ export function PlayPage() {
           return newPlayboard;
         });
       }
+      await wait(1000);
     },
     [currentTry]
   );
@@ -71,9 +72,10 @@ export function PlayPage() {
   const onCommitWord = useCallback(
     function () {
       // validate word exists
-      if (!dictionary.includes(targetWord)) {
+      if (!dictionary.includes(playboard[currentTry].map((item) => item.letter).join(''))) {
+        console.log('unkown word !');
         // display "unknown word !"
-        return;
+        // return;
       }
       // validate word is not the same as the target word
       setKeyboardDisabled(true);
@@ -123,7 +125,7 @@ export function PlayPage() {
         sx={{
           overflowY: 'auto',
           overflowX: 'none',
-          height: '30vh',
+          height: '40vh',
           maxWidth: '100%'
         }}
       >
