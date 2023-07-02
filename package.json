@@ -37,7 +37,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "npm run build:icons && react-scripts build",
+    "build:icons": "npx @vite-pwa/assets-generator --preset minimal public/icons/master.svg",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
