@@ -20,17 +20,14 @@ export function matchGuess(word: string, guess: LetterGuessState[]): LetterGuess
   if (guess.length !== word.length) {
     throw new Error('Guess must be same length as word');
   }
-  console.log('Guessing: %s', word);
   return guess.map(({ letter }, index) => {
     const solutionLetter = word.charAt(index);
-    console.log('  comparing: %s with %s', solutionLetter, letter);
     if (solutionLetter === letter) {
       return {
         letter,
         state: 'matched'
       };
     }
-    console.log('  word includes %s: %s', letter, word.includes(letter));
     if (word.includes(letter)) {
       return {
         letter,
